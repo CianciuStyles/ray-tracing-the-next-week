@@ -2,6 +2,7 @@ package io.github.cianciustyles
 
 import kotlin.math.PI
 import kotlin.math.tan
+import kotlin.random.Random
 
 class Camera(
     lookFrom: Point3,
@@ -10,7 +11,9 @@ class Camera(
     verticalFieldOfView: Double,
     aspectRatio: Double,
     aperture: Double,
-    focusDistance: Double
+    focusDistance: Double,
+    private val time0: Double,
+    private val time1: Double
 ) {
     private val origin: Point3
     private val horizontal: Vector3
@@ -45,7 +48,8 @@ class Camera(
 
         return Ray(
             origin + offset,
-            lowerLeftCorner + horizontal * s + vertical * t - origin - offset
+            lowerLeftCorner + horizontal * s + vertical * t - origin - offset,
+            Random.nextDouble(time0, time1)
         )
     }
 

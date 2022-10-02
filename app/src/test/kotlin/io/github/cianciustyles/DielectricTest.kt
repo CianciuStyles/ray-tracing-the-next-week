@@ -16,7 +16,10 @@ class DielectricTest {
             0.0,
             true
         )
-        val rayIn = Ray(direction = Vector3(z = 1.0))
+        val rayIn = Ray(
+            direction = Vector3(z = 1.0),
+            time = 0.5
+        )
 
         val (color, rayOut) = glass.scatter(rayIn, hitRecord)
 
@@ -24,5 +27,6 @@ class DielectricTest {
         assertNotEquals(rayIn, rayOut)
         assertEquals(point, rayOut.origin)
         assertNotEquals(normal, rayOut.direction)
+        assertEquals(rayIn.time, rayOut.time, Math.ulp(rayIn.time))
     }
 }

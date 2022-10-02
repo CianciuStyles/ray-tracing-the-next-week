@@ -22,7 +22,7 @@ class Dielectric(
             unitDirection.refract(hitRecord.normal, refractionRatio)
         }
 
-        return Pair(Color.WHITE, Ray(hitRecord.point, direction))
+        return Pair(Color.WHITE, Ray(hitRecord.point, direction, rayIn.time))
     }
 
     private fun reflectance(cosine: Double, refractionRatio: Double): Double {
