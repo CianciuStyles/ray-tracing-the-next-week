@@ -36,4 +36,14 @@ class Point3Test {
         assertEquals(3.0, result.y, Math.ulp(3.0))
         assertEquals(-2.0, result.z, Math.ulp(-2.0))
     }
+
+    @Test
+    fun testOperatorGet() {
+        val point = Point3(1.0, 2.0, 3.0)
+
+        assertEquals(1.0, point[0], Math.ulp(0.0))
+        assertEquals(2.0, point[1], Math.ulp(0.0))
+        assertEquals(3.0, point[2], Math.ulp(0.0))
+        assertThrows("Invalid index", IllegalArgumentException::class.java) { point[3] }
+    }
 }

@@ -26,4 +26,10 @@ class Sphere(
 
         return hitRecord(ray, (ray.at(root) - center) / radius, material, root)
     }
+
+    override fun boundingBox(time0: Double, time1: Double): Aabb =
+        Aabb(
+            center - Vector3(radius, radius, radius),
+            center + Vector3(radius, radius, radius)
+        )
 }

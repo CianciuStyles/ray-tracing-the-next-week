@@ -1,5 +1,6 @@
 package io.github.cianciustyles
 
+import kotlin.IllegalArgumentException
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -72,6 +73,14 @@ data class Vector3(
         val parallel = normal * -sqrt(abs(1.0 - perpendicular.lengthSquared()))
         return parallel + perpendicular
     }
+
+    operator fun get(index: Int): Double =
+        when (index) {
+            0 -> this.x
+            1 -> this.y
+            2 -> this.z
+            else -> throw IllegalArgumentException("Invalid index")
+        }
 
     companion object {
         fun random(): Vector3 =
