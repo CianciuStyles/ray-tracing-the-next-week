@@ -17,7 +17,7 @@ class LambertianTest {
             0.0,
             true
         )
-        val rayIn = Ray()
+        val rayIn = Ray(time = 1.5)
 
         val (albedo, rayOut) = lambertian.scatter(rayIn, hitRecord)
 
@@ -25,5 +25,6 @@ class LambertianTest {
         assertNotEquals(rayIn, rayOut)
         assertEquals(point, rayOut.origin)
         assertNotEquals(normal, rayOut.direction)
+        assertEquals(rayIn.time, rayOut.time, Math.ulp(rayIn.time))
     }
 }

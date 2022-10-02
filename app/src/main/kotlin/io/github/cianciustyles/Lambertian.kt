@@ -9,6 +9,6 @@ class Lambertian(
         // Catch degenerate scatter direction
         if (scatterDirection.nearZero()) scatterDirection = hitRecord.normal
 
-        return Pair(albedo, Ray(hitRecord.point, scatterDirection))
+        return Pair(albedo, Ray(hitRecord.point, scatterDirection, rayIn.time))
     }
 }

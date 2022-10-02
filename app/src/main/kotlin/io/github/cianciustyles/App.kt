@@ -24,7 +24,8 @@ private fun randomScene(): HittableList {
                         // diffuse
                         val albedo = Color.random() * Color.random()
                         val sphereMaterial = Lambertian(albedo)
-                        world.add(Sphere(center, 0.2, sphereMaterial))
+                        val center2 = center + Vector3(0.0, Random.nextDouble(0.5), 0.0)
+                        world.add(MovingSphere(center, center2, 0.0, 1.0, 0.2, sphereMaterial))
                     }
                     0.8 <= chooseMaterial && chooseMaterial < 0.95 -> {
                         // metal
@@ -57,8 +58,8 @@ private fun randomScene(): HittableList {
 
 fun main() {
     // Image
-    val aspectRatio = 3.0 / 2.0
-    val imageWidth = 300
+    val aspectRatio = 16.0 / 9.0
+    val imageWidth = 400
     val imageHeight = (imageWidth / aspectRatio).toInt()
     val samplesPerPixel = 100
     val maxDepth = 50
@@ -81,7 +82,9 @@ fun main() {
         verticalFieldOfView,
         aspectRatio,
         aperture,
-        distanceToFocus
+        distanceToFocus,
+        0.0,
+        1.0
     )
 
     // Render

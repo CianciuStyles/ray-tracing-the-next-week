@@ -15,7 +15,9 @@ class CameraTest {
             90.0,
             16.0 / 9.0,
             0.0,
-            (lookFrom - lookAt).length()
+            (lookFrom - lookAt).length(),
+            0.0,
+            0.1
         )
 
         val ray = camera.getRay(0.5, 0.5)
