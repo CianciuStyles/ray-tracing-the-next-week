@@ -83,4 +83,34 @@ class HittableListTest {
 
         assertNull(hittableList.hit(ray, 0.2, 0.3))
     }
+
+    @Test
+    fun testBoundingBoxEmptyList() {
+        val list = HittableList()
+
+        val boundingBox = list.boundingBox(0.0, 1.0)
+        assertNull(boundingBox)
+    }
+
+    @Test
+    fun testBoundingBoxFullList() {
+        val list = HittableList(mutableListOf(
+            Sphere(
+                Point3(),
+                1.0,
+                Lambertian()
+            ),
+            Sphere(
+                Point3(5.0, 5.0, 5.0),
+                2.0,
+                Lambertian()
+            )
+        ))
+
+        val boundingBox = list.boundingBox(0.0, 1.0)
+        assertEquals(
+            Aabb(Point3(-1.0, -1.0, -1.0), Point3(7.0, 7.0, 7.0)),
+            boundingBox
+        )
+    }
 }

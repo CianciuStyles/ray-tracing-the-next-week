@@ -88,4 +88,19 @@ class SphereTest {
         assertEquals(-outwardNormal, hitRecord.normal)
         assertFalse(hitRecord.frontFace)
     }
+
+    @Test
+    fun testBoundingBox() {
+        val sphere = Sphere(
+            center = Point3(),
+            radius = 2.0,
+            Lambertian()
+        )
+
+        val boundingBox = sphere.boundingBox(0.0, 1.0)
+        assertEquals(
+            Aabb(Point3(-2.0, -2.0, -2.0), Point3(2.0, 2.0, 2.0)),
+            boundingBox
+        )
+    }
 }

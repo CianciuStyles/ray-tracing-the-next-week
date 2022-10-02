@@ -250,4 +250,14 @@ class Vector3Test {
         assertEquals(0.0, refracted.y, Math.ulp(0.0))
         assertEquals(0.0, refracted.z, Math.ulp(0.0))
     }
+
+    @Test
+    fun testOperatorGet() {
+        val vector = Vector3(1.0, 2.0, 3.0)
+
+        assertEquals(1.0, vector[0], Math.ulp(0.0))
+        assertEquals(2.0, vector[1], Math.ulp(0.0))
+        assertEquals(3.0, vector[2], Math.ulp(0.0))
+        assertThrows("Invalid index", IllegalArgumentException::class.java) { vector[3] }
+    }
 }

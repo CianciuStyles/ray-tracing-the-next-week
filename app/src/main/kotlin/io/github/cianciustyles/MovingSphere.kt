@@ -32,4 +32,16 @@ class MovingSphere(
 
     fun center(time: Double): Point3 =
         center0 + (center1 - center0) * ((time - time0) / (time1 - time0))
+
+    override fun boundingBox(time0: Double, time1: Double): Aabb {
+        val box0 = Aabb(
+            center(time0) - Vector3(radius, radius, radius),
+            center(time0) + Vector3(radius, radius, radius)
+        )
+        val box1 = Aabb(
+            center(time1) - Vector3(radius, radius, radius),
+            center(time1) + Vector3(radius, radius, radius)
+        )
+        return Aabb.surroundingBox(box0, box1)
+    }
 }

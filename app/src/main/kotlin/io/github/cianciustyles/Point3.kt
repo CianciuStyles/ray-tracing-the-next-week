@@ -21,4 +21,12 @@ data class Point3(
             y - point.y,
             z - point.z
         )
+
+    operator fun get(index: Int): Double =
+        when (index) {
+            0 -> this.x
+            1 -> this.y
+            2 -> this.z
+            else -> throw IllegalArgumentException("Invalid index")
+        }
 }
