@@ -14,6 +14,8 @@ class DielectricTest {
             normal = normal,
             material = glass,
             0.0,
+            0.0,
+            0.0,
             true
         )
         val rayIn = Ray(

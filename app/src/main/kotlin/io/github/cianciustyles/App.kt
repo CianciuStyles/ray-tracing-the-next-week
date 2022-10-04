@@ -10,8 +10,15 @@ import kotlin.random.Random
 private fun randomScene(): HittableList {
     val world = HittableList()
 
-    val groundMaterial = Lambertian(Color(0.5, 0.5, 0.5))
-    world.add(Sphere(Point3(0.0, -1000.0, 0.0), 1000.0, groundMaterial))
+    val checker = CheckerTexture(
+        Color(0.2, 0.3, 0.1),
+        Color(0.9, 0.9, 0.9)
+    )
+    world.add(Sphere(
+        Point3(0.0, -1000.0, 0.0),
+        1000.0,
+        Lambertian(checker
+    )))
 
     for (a in -11 until 11) {
         for (b in -11 until 11) {
@@ -45,15 +52,45 @@ private fun randomScene(): HittableList {
     }
 
     val material1 = Dielectric(1.5)
-    world.add(Sphere(Point3(0.0, 1.0, 0.0), 1.0, material1))
+    world.add(Sphere(
+        Point3(0.0, 1.0, 0.0),
+        1.0,
+        material1
+    ))
 
     val material2 = Lambertian(Color(0.4, 0.2, 0.1))
-    world.add(Sphere(Point3(-4.0, 1.0, 0.0), 1.0, material2))
+    world.add(Sphere(
+        Point3(-4.0, 1.0, 0.0),
+        1.0,
+        material2
+    ))
 
     val material3 = Metal(Color(0.7, 0.6, 0.5), 0.0)
-    world.add(Sphere(Point3(4.0, 1.0, 0.0), 1.0, material3))
+    world.add(Sphere(
+        Point3(4.0, 1.0, 0.0),
+        1.0,
+        material3
+    ))
 
     return world
+}
+
+fun twoSpheres(): HittableList {
+    val objects = HittableList()
+
+    val checker = CheckerTexture(Color(0.2, 0.3, 0.1), Color(0.9, 0.9, 0.9))
+    objects.add(Sphere(
+        Point3(0.0, -10.0, 0.0),
+        10.0,
+        Lambertian(checker)
+    ))
+    objects.add(Sphere(
+        Point3(0.0, 10.0, 0.0),
+        10.0,
+        Lambertian(checker)
+    ))
+
+    return objects
 }
 
 fun main() {
@@ -65,14 +102,25 @@ fun main() {
     val maxDepth = 50
 
     // World
-    val world = randomScene()
-
-    // Camera
+    var world = HittableList()
     val lookFrom = Point3(13.0, 2.0, 3.0)
     val lookAt = Point3()
-    val vectorUp = Vector3(0.0, 1.0, 0.0)
     val verticalFieldOfView = 20.0
-    val aperture = 0.1
+    var aperture = 0.0
+
+    when (1) {
+        1 -> run {
+            world = randomScene()
+            aperture = 0.1
+        }
+        2 -> run {
+            world = twoSpheres()
+        }
+    }
+
+
+    // Camera
+    val vectorUp = Vector3(0.0, 1.0, 0.0)
     val distanceToFocus = 10.0
 
     val camera = Camera(

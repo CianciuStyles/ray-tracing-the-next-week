@@ -15,6 +15,8 @@ class LambertianTest {
             normal,
             lambertian,
             0.0,
+            0.25,
+            0.5,
             true
         )
         val rayIn = Ray(time = 1.5)

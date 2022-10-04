@@ -13,6 +13,8 @@ class MetalTest {
             normal = normal,
             material = metal,
             t = 0.0,
+            u = 0.0,
+            v = 0.0,
             frontFace = true
         )
         val rayIn = Ray(direction = Vector3(z = -1.0))
@@ -32,6 +34,8 @@ class MetalTest {
             normal = normal,
             material = metal,
             t = 0.0,
+            u = 0.0,
+            v = 0.0,
             frontFace = true
         )
         val rayIn = Ray(
