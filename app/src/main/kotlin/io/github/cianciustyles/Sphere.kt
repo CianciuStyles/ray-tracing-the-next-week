@@ -1,5 +1,8 @@
 package io.github.cianciustyles
 
+import kotlin.math.PI
+import kotlin.math.acos
+import kotlin.math.atan2
 import kotlin.math.sqrt
 
 class Sphere(
@@ -24,7 +27,9 @@ class Sphere(
             if (root < tMin || tMax < root) return null
         }
 
-        return hitRecord(ray, (ray.at(root) - center) / radius, material, root)
+        val outwardNormal = (ray.at(root) - center) / radius
+        val (u, v) = getSphereUV(outwardNormal)
+        return hitRecord(ray, outwardNormal, material, root, u, v)
     }
 
     override fun boundingBox(time0: Double, time1: Double): Aabb =
@@ -32,4 +37,13 @@ class Sphere(
             center - Vector3(radius, radius, radius),
             center + Vector3(radius, radius, radius)
         )
+
+    companion object {
+        fun getSphereUV(v: Vector3): Pair<Double, Double> {
+            val theta = acos(-v.y)
+            val phi = atan2(-v.z, v.x) + PI
+
+            return Pair(phi / (2 * PI), theta / PI)
+        }
+    }
 }

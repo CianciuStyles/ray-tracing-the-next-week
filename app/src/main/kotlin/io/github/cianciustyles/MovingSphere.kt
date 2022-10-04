@@ -27,7 +27,8 @@ class MovingSphere(
             if (root < tMin || tMax > root) return null
         }
 
-        return hitRecord(ray, (ray.at(root) - center(ray.time)) / radius, material, root)
+        val outwardNormal = (ray.at(root) - center(ray.time)) / radius
+        return hitRecord(ray, outwardNormal, material, root, 0.0, 0.0)
     }
 
     fun center(time: Double): Point3 =
