@@ -38,6 +38,26 @@ class Point3Test {
     }
 
     @Test
+    fun testTimesInt() {
+        val point = Point3(1.0, 2.0, 3.0)
+        val result = point * 2
+
+        assertEquals(2.0, result.x, Math.ulp(0.0))
+        assertEquals(4.0, result.y, Math.ulp(0.0))
+        assertEquals(6.0, result.z, Math.ulp(0.0))
+    }
+
+    @Test
+    fun testTimesDouble() {
+        val point = Point3(1.0, 2.0, 3.0)
+        val result = point * 3.0
+
+        assertEquals(3.0, result.x, Math.ulp(0.0))
+        assertEquals(6.0, result.y, Math.ulp(0.0))
+        assertEquals(9.0, result.z, Math.ulp(0.0))
+    }
+
+    @Test
     fun testOperatorGet() {
         val point = Point3(1.0, 2.0, 3.0)
 

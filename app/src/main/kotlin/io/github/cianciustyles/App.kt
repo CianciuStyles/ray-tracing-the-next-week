@@ -93,6 +93,24 @@ fun twoSpheres(): HittableList {
     return objects
 }
 
+fun twoPerlinSpheres(): HittableList {
+    val objects = HittableList()
+
+    val perlinTexture = NoiseTexture(4.0)
+    objects.add(Sphere(
+        Point3(0.0, -1000.0, 0.0),
+        1000.0,
+        Lambertian(perlinTexture)
+    ))
+    objects.add(Sphere(
+        Point3(0.0, 2.0, 0.0),
+        2.0,
+        Lambertian(perlinTexture)
+    ))
+
+    return objects
+}
+
 fun main() {
     // Image
     val aspectRatio = 16.0 / 9.0
@@ -108,13 +126,16 @@ fun main() {
     val verticalFieldOfView = 20.0
     var aperture = 0.0
 
-    when (1) {
+    when (3) {
         1 -> run {
             world = randomScene()
             aperture = 0.1
         }
         2 -> run {
             world = twoSpheres()
+        }
+        3 -> run {
+            world = twoPerlinSpheres()
         }
     }
 

@@ -22,6 +22,12 @@ data class Point3(
             z - point.z
         )
 
+    operator fun times(i: Int): Point3 =
+        Point3(x * i, y * i, z * i)
+
+    operator fun times(i: Double): Point3 =
+        Point3(x * i, y * i, z * i)
+
     operator fun get(index: Int): Double =
         when (index) {
             0 -> this.x
