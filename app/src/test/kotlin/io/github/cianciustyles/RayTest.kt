@@ -39,8 +39,9 @@ class RayTest {
         val ray = Ray()
         val metalColor = Color(0.5, 0.6, 0.7)
         val hittable = Sphere(material = Lambertian())
+        val background = Color(0.2, 0.5, 0.3)
 
-        val rayColor = ray.rayColor(hittable, 0)
+        val rayColor = ray.rayColor(background, hittable, 0)
 
         assertNotEquals(rayColor, metalColor)
         assertEquals(rayColor, Color.BLACK)
@@ -51,12 +52,11 @@ class RayTest {
         val direction = Vector3(z = 1.0)
         val ray = Ray(direction = direction)
         val hittable = Sphere(material = Lambertian())
+        val background = Color(0.2, 0.5, 0.3)
 
-        val rayColor = ray.rayColor(hittable, 1000)
+        val rayColor = ray.rayColor(background, hittable, 1000)
 
         assertNotEquals(Color.BLACK, rayColor)
-
-        val t = (direction.unit().y + 1.0) * 0.5
-        assertEquals(Color.WHITE * (1.0 - t) + Color.BLUE * t, rayColor)
+        assertEquals(background, rayColor)
     }
 }

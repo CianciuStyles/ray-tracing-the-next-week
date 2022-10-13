@@ -111,31 +111,88 @@ fun twoPerlinSpheres(): HittableList {
     return objects
 }
 
+fun simpleLight(): HittableList {
+    val objects = HittableList()
+
+    val perlinTexture = NoiseTexture(4.0)
+    objects.add(Sphere(
+        Point3(y = -1000.0),
+        1000.0,
+        Lambertian(perlinTexture)
+    ))
+    objects.add(Sphere(
+        Point3(y = 2.0),
+        2.0,
+        Lambertian(perlinTexture)
+    ))
+
+    val light = DiffuseLight(Color(4.0, 4.0, 4.0))
+    objects.add(XyRect(light, 3.0, 5.0, 1.0, 3.0, -2.0))
+
+    return objects
+}
+
+fun cornellBox(): HittableList {
+    val objects = HittableList()
+
+    val red = Lambertian(Color(0.65, 0.05, 0.05))
+    val white = Lambertian(Color(0.73, 0.73, 0.73))
+    val green = Lambertian(Color(0.12, 0.45, 0.15))
+    val light = DiffuseLight(Color(15.0, 15.0, 15.0))
+
+    objects.add(YzRect(green, 0.0, 555.0, 0.0, 555.0, 555.0))
+    objects.add(YzRect(red, 0.0, 555.0, 0.0, 555.0, 0.0))
+    objects.add(XzRect(light, 213.0, 343.0, 227.0, 332.0, 554.0))
+    objects.add(XzRect(white, 0.0, 555.0, 0.0, 555.0, 0.0))
+    objects.add(XzRect(white, 0.0, 555.0, 0.0, 555.0, 555.0))
+    objects.add(XyRect(white, 0.0, 555.0, 0.0, 555.0, 555.0))
+
+    return objects
+}
+
 fun main() {
     // Image
-    val aspectRatio = 16.0 / 9.0
-    val imageWidth = 400
-    val imageHeight = (imageWidth / aspectRatio).toInt()
-    val samplesPerPixel = 100
+    var aspectRatio = 16.0 / 9.0
+    var imageWidth = 400
+    var samplesPerPixel = 100
     val maxDepth = 50
 
     // World
     var world = HittableList()
-    val lookFrom = Point3(13.0, 2.0, 3.0)
-    val lookAt = Point3()
-    val verticalFieldOfView = 20.0
+    var lookFrom = Point3(13.0, 2.0, 3.0)
+    var lookAt = Point3()
+    var verticalFieldOfView = 20.0
     var aperture = 0.0
+    var background = Color.BLACK
 
-    when (3) {
+    when (6) {
         1 -> run {
             world = randomScene()
             aperture = 0.1
+            background = Color(0.7, 0.8, 1.0)
         }
         2 -> run {
             world = twoSpheres()
+            background = Color(0.7, 0.8, 1.0)
         }
         3 -> run {
             world = twoPerlinSpheres()
+            background = Color(0.7, 0.8, 1.0)
+        }
+        5 -> run {
+            world = simpleLight()
+            samplesPerPixel = 400
+            lookFrom = Point3(26.0, 3.0, 6.0)
+            lookAt = Point3(0.0, 2.0, 0.0)
+        }
+        6 -> run {
+            world = cornellBox()
+            aspectRatio = 1.0
+            imageWidth = 600
+            samplesPerPixel = 200
+            lookFrom = Point3(278.0, 278.0, -800.0)
+            lookAt = Point3(278.0, 278.0, 0.0)
+            verticalFieldOfView = 40.0
         }
     }
 
@@ -157,6 +214,7 @@ fun main() {
     )
 
     // Render
+    val imageHeight = (imageWidth / aspectRatio).toInt()
     File("image.ppm").bufferedWriter().use { image ->
         image.write("")
         image.write("P3\n")
@@ -172,7 +230,7 @@ fun main() {
                     val u = (i + Random.nextDouble()) / (imageWidth - 1)
                     val v = (j + Random.nextDouble()) / (imageHeight - 1)
                     val ray = camera.getRay(u, v)
-                    pixelColor += ray.rayColor(world, maxDepth)
+                    pixelColor += ray.rayColor(background, world, maxDepth)
                 }
 
                 image.write("${pixelColor.writeColor(samplesPerPixel)}\n")
