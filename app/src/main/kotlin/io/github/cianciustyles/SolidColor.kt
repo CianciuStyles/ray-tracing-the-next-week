@@ -1,6 +1,6 @@
 package io.github.cianciustyles
 
-class SolidColor(
+data class SolidColor(
     private val color: Color
 ): Texture() {
     constructor(red: Double, green: Double, blue: Double):
