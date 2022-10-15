@@ -111,6 +111,14 @@ fun twoPerlinSpheres(): HittableList {
     return objects
 }
 
+fun earth(): HittableList {
+    val earthTexture = ImageTexture("earthmap.jpg")
+    val earthSurface = Lambertian(earthTexture)
+    val globe = Sphere(radius = 2.0, material = earthSurface)
+
+    return HittableList(mutableListOf(globe))
+}
+
 fun simpleLight(): HittableList {
     val objects = HittableList()
 
@@ -204,7 +212,7 @@ fun main() {
     var aperture = 0.0
     var background = Color.BLACK
 
-    when (7) {
+    when (4) {
         1 -> run {
             world = randomScene()
             aperture = 0.1
@@ -218,6 +226,11 @@ fun main() {
 
         3 -> run {
             world = twoPerlinSpheres()
+            background = Color(0.7, 0.8, 1.0)
+        }
+
+        4 -> run {
+            world = earth()
             background = Color(0.7, 0.8, 1.0)
         }
 
