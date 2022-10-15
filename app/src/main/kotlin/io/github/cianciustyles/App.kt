@@ -147,6 +147,16 @@ fun cornellBox(): HittableList {
     objects.add(XzRect(white, 0.0, 555.0, 0.0, 555.0, 555.0))
     objects.add(XyRect(white, 0.0, 555.0, 0.0, 555.0, 555.0))
 
+    var box1: Hittable = Box(white, Point3(), Point3(165.0, 330.0, 165.0))
+    box1 = RotateY(box1, 15.0)
+    box1 = Translate(box1, Vector3(265.0, 0.0, 295.0))
+    objects.add(box1)
+
+    var box2: Hittable = Box(white, Point3(), Point3(165.0, 165.0, 165.0))
+    box2 = RotateY(box2, -18.0)
+    box2 = Translate(box2, Vector3(130.0, 0.0, 65.0))
+    objects.add(box2)
+
     return objects
 }
 
