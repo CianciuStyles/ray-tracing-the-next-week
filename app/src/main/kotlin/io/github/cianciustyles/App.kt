@@ -160,6 +160,35 @@ fun cornellBox(): HittableList {
     return objects
 }
 
+fun cornellSmoke(): HittableList {
+    val objects = HittableList()
+
+    val red = Lambertian(Color(0.65, 0.05, 0.05))
+    val white = Lambertian(Color(0.73, 0.73, 0.73))
+    val green = Lambertian(Color(0.12, 0.45, 0.15))
+    val light = DiffuseLight(Color(7.0, 7.0, 7.0))
+
+    objects.add(YzRect(green, 0.0, 555.0, 0.0, 555.0, 555.0))
+    objects.add(YzRect(red, 0.0, 555.0, 0.0, 555.0, 0.0))
+    objects.add(XzRect(light, 113.0, 443.0, 127.0, 432.0, 554.0))
+    objects.add(XzRect(white, 0.0, 555.0, 0.0, 555.0, 555.0))
+    objects.add(XzRect(white, 0.0, 555.0, 0.0, 555.0, 0.0))
+    objects.add(XyRect(white, 0.0, 555.0, 0.0, 555.0, 555.0))
+
+    var box1: Hittable = Box(white, Point3(), Point3(165.0, 330.0, 165.0))
+    box1 = RotateY(box1, 15.0)
+    box1 = Translate(box1, Vector3(265.0, 0.0, 295.0))
+
+    var box2: Hittable = Box(white, Point3(), Point3(165.0, 165.0, 165.0))
+    box2 = RotateY(box2, -18.0)
+    box2 = Translate(box2, Vector3(130.0, 0.0, 65.0))
+
+    objects.add(ConstantMedium(box1, 0.01, Color.BLACK))
+    objects.add(ConstantMedium(box2, 0.01, Color.WHITE))
+
+    return objects
+}
+
 fun main() {
     // Image
     var aspectRatio = 16.0 / 9.0
@@ -175,26 +204,30 @@ fun main() {
     var aperture = 0.0
     var background = Color.BLACK
 
-    when (6) {
+    when (7) {
         1 -> run {
             world = randomScene()
             aperture = 0.1
             background = Color(0.7, 0.8, 1.0)
         }
+
         2 -> run {
             world = twoSpheres()
             background = Color(0.7, 0.8, 1.0)
         }
+
         3 -> run {
             world = twoPerlinSpheres()
             background = Color(0.7, 0.8, 1.0)
         }
+
         5 -> run {
             world = simpleLight()
             samplesPerPixel = 400
             lookFrom = Point3(26.0, 3.0, 6.0)
             lookAt = Point3(0.0, 2.0, 0.0)
         }
+
         6 -> run {
             world = cornellBox()
             aspectRatio = 1.0
@@ -204,8 +237,17 @@ fun main() {
             lookAt = Point3(278.0, 278.0, 0.0)
             verticalFieldOfView = 40.0
         }
-    }
 
+        7 -> run {
+            world = cornellSmoke()
+            aspectRatio = 1.0
+            imageWidth = 600
+            samplesPerPixel = 200
+            lookFrom = Point3(278.0, 278.0, -800.0)
+            lookAt = Point3(278.0, 278.0, 0.0)
+            verticalFieldOfView = 40.0
+        }
+    }
 
     // Camera
     val vectorUp = Vector3(0.0, 1.0, 0.0)
