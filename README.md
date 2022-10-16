@@ -16,4 +16,4 @@ To run `ray-tracing-the-next-week`:
 
 ### Final result
 
-![Final result](https://i.imgur.com/hvtAB8Kl.png)
+![Final result](https://i.imgur.com/1k3ivS6.png)
