@@ -1,5 +1,7 @@
 package io.github.cianciustyles
 
+import kotlin.random.Random
+
 data class Point3(
     val x: Double = 0.0,
     val y: Double = 0.0,
@@ -35,4 +37,13 @@ data class Point3(
             2 -> this.z
             else -> throw IllegalArgumentException("Invalid index")
         }
+
+    companion object {
+        fun random(min: Double, max: Double) =
+            Point3(
+                Random.nextDouble(min, max),
+                Random.nextDouble(min, max),
+                Random.nextDouble(min, max)
+            )
+    }
 }

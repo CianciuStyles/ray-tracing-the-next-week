@@ -5,6 +5,7 @@
 package io.github.cianciustyles
 
 import java.io.File
+import java.util.stream.IntStream
 import kotlin.random.Random
 
 private fun randomScene(): HittableList {
@@ -197,6 +198,78 @@ fun cornellSmoke(): HittableList {
     return objects
 }
 
+fun finalScene(): HittableList {
+    val boxes1 = HittableList()
+    val ground = Lambertian(Color(0.48, 0.83, 0.53))
+
+    val boxesPerSide = 20
+    for (i in 0 until boxesPerSide) {
+        for (j in 0 until boxesPerSide) {
+            val w = 100.0
+            val x0 = -1000.0 + i * w
+            val z0 = -1000.0 + j * w
+            val y0 = 0.0
+            val x1 = x0 + w
+            val y1 = Random.nextDouble(1.0, 101.0)
+            val z1 = z0 + w
+
+            boxes1.add(Box(
+                ground,
+                Point3(x0, y0, z0),
+                Point3(x1, y1, z1)
+            ))
+        }
+    }
+
+    val objects = HittableList()
+    objects.add(BvhNode(boxes1, 0.0, 1.0))
+
+    val light = DiffuseLight(Color(7.0, 7.0, 7.0))
+    objects.add(XzRect(light, 123.0, 423.0, 147.0, 412.0, 554.0))
+
+    val center1 = Point3(400.0, 400.0, 200.0)
+    val center2 = center1 + Vector3(x = 30.0)
+    val movingSphereMaterial = Lambertian(Color(0.7, 0.3, 0.1))
+    objects.add(MovingSphere(center1, center2, 0.0, 1.0, 50.0, movingSphereMaterial))
+
+    objects.add(Sphere(Point3(260.0, 150.0, 45.0), 50.0, Dielectric(1.5)))
+    objects.add(Sphere(
+        Point3(0.0, 150.0, 145.0),
+        50.0,
+        Metal(Color(0.8, 0.8, 0.9), 1.0)
+    ))
+
+    var boundary = Sphere(Point3(360.0, 150.0, 145.0), 70.0, Dielectric(1.5))
+    objects.add(boundary)
+    objects.add(ConstantMedium(boundary, 0.2, Color(0.2, 0.4, 0.9)))
+    boundary = Sphere(Point3(), 5000.0, Dielectric(1.5))
+    objects.add(ConstantMedium(boundary, 0.0001, Color.WHITE))
+
+    val earthMap = Lambertian(ImageTexture("earthmap.jpg"))
+    objects.add(Sphere(Point3(400.0, 200.0, 400.0), 100.0, earthMap))
+    val perlinTexture = NoiseTexture(0.1)
+    objects.add(Sphere(Point3(220.0, 280.0, 300.0), 80.0, Lambertian(perlinTexture)))
+
+    val boxes2 = HittableList()
+    val white = Lambertian(Color(0.73, 0.73, 0.73))
+    val ns = 1000
+    for (j in 0 until ns) {
+        boxes2.add(Sphere(Point3.random(0.0, 165.0), 10.0, white))
+    }
+
+    objects.add(
+        Translate(
+            RotateY(
+                BvhNode(boxes2, 0.0, 1.0),
+                15.0)
+            ,
+            Vector3(-100.0, 270.0, 395.0)
+        )
+    )
+
+    return objects
+}
+
 fun main() {
     // Image
     var aspectRatio = 16.0 / 9.0
@@ -212,7 +285,7 @@ fun main() {
     var aperture = 0.0
     var background = Color.BLACK
 
-    when (4) {
+    when (8) {
         1 -> run {
             world = randomScene()
             aperture = 0.1
@@ -260,6 +333,16 @@ fun main() {
             lookAt = Point3(278.0, 278.0, 0.0)
             verticalFieldOfView = 40.0
         }
+
+        8 -> run {
+            world = finalScene()
+            aspectRatio = 1.0
+            imageWidth = 800
+            samplesPerPixel = 10000
+            lookFrom = Point3(478.0, 278.0, -600.0)
+            lookAt = Point3(278.0, 278.0, 0.0)
+            verticalFieldOfView = 40.0;
+        }
     }
 
     // Camera
@@ -290,13 +373,15 @@ fun main() {
             System.err.println("Scanlines remaining: $j")
 
             for (i in 0 until imageWidth) {
-                var pixelColor = Color.BLACK
-                for (s in 0..samplesPerPixel) {
-                    val u = (i + Random.nextDouble()) / (imageWidth - 1)
-                    val v = (j + Random.nextDouble()) / (imageHeight - 1)
-                    val ray = camera.getRay(u, v)
-                    pixelColor += ray.rayColor(background, world, maxDepth)
-                }
+                val pixelColor = IntStream.range(0, samplesPerPixel)
+                    .parallel()
+                    .mapToObj {
+                        val u = (i + Random.nextDouble()) / (imageWidth - 1)
+                        val v = (j + Random.nextDouble()) / (imageHeight - 1)
+                        val ray = camera.getRay(u, v)
+                        ray.rayColor(background, world, maxDepth)
+                    }
+                    .reduce(Color.BLACK, Color::plus)
 
                 image.write("${pixelColor.writeColor(samplesPerPixel)}\n")
             }

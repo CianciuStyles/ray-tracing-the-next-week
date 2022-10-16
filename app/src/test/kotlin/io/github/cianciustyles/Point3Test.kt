@@ -66,4 +66,16 @@ class Point3Test {
         assertEquals(3.0, point[2], Math.ulp(0.0))
         assertThrows("Invalid index", IllegalArgumentException::class.java) { point[3] }
     }
+
+    @Test
+    fun testRandom() {
+        val min = 2.0
+        val max = 5.0
+
+        val point = Point3.random(2.0, 3.0)
+
+        assertTrue(min < point.x && point.x < max)
+        assertTrue(min < point.y && point.y < max)
+        assertTrue(min < point.z && point.z < max)
+    }
 }
